@@ -173,7 +173,6 @@ class PostsPagesTests(TestCase):
             reverse('posts:group_posts', kwargs={'slug': self.group.slug}))
         self.assertEqual(len(response.context['page_obj']), 1)
 
-
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -192,7 +191,8 @@ class PostsPagesTests(TestCase):
         for path in paths:
             with self.subTest(path=path):
                 response = self.authorized_client.get(path)
-                self.assertEqual(response.context['page_obj'][0].image, self.post.image)
+                self.assertEqual(
+                    response.context['page_obj'][0].image, self.post.image)
 
     def test_post_has_correct_group(self):
         response = self.authorized_client.get(
@@ -207,7 +207,7 @@ class PostsPagesTests(TestCase):
 
     def test_authorized_client_can_comment_post(self):
         comment_count = Comment.objects.count()
-        form_data ={
+        form_data = {
             'text': 'text comment'
         }
         response = self.authorized_user.post(
@@ -239,8 +239,9 @@ class PostsPagesTests(TestCase):
         self.assertNotEqual(response.content, cache_test)
 
     def test_follow_page_for_follower(self):
-        following = self.authorized_follower.get(
-            reverse('posts:profile_follow', kwargs={'username': self.post_author.username}))
+        self.authorized_follower.get(
+            reverse('posts:profile_follow',
+                    kwargs={'username': self.post_author.username}))
         response = self.authorized_follower.get(reverse(
             'posts:follow_index'))
         post = Post.objects.create(author=self.post_author)
@@ -256,7 +257,8 @@ class PostsPagesTests(TestCase):
 
     def test_follow(self):
         self.authorized_not_follower.get(
-            reverse('posts:profile_follow', kwargs={'username': self.post_author.username}))
+            reverse('posts:profile_follow',
+                    kwargs={'username': self.post_author.username}))
         self.assertTrue(Follow.objects.filter(
             user=self.not_follower,
             author=self.post_author,
@@ -267,8 +269,9 @@ class PostsPagesTests(TestCase):
         self.assertTrue(Follow.objects.filter(
             user=self.user,
             author=self.post_author).exists())
-        response = self.authorized_client.get(
-            reverse('posts:profile_unfollow', kwargs={'username': self.post_author.username}))
+        self.authorized_client.get(
+            reverse('posts:profile_unfollow',
+                    kwargs={'username': self.post_author.username}))
         Follow.objects.filter(user=self.user, author=self.post_author).delete()
         self.assertFalse(Follow.objects.filter(
             user=self.user,
