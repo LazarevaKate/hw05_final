@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block content %}
+  <h1>{{ text }}</h1>
+  {% load cache %}
+  {% cache 20 index_page page_obj.number %}
+  {% include 'includes/switcher.html' %}
+  {% for post in page_obj %}
+    {% include 'includes/post_card.html' %}
+    {% if post.group %}
+      <a href=" {{ post.group.get_absolute_url }} ">Все записи группы {{ post.group }}</a>
+    {% endif %}
+    <br>
+    <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+    <br>
+    <a href="{% url 'posts:post_detail' post.pk %}">подробная информация </a>
+    {% if not forloop.last %}<hr>{% endif %}
+  {% endfor %}
+  {% endcache %}
+{% endblock %}
