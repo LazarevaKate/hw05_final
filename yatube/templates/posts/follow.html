@@ -2,6 +2,7 @@
 {% block title %} Авторы, на которых вы подписаны {% endblock %}
 {% block content %}
   <h1>{{ text }}</h1>
+  {% include 'includes/switcher.html' %}
   {% for post in page_obj %}
     {% include 'includes/post_card.html' %}
     {% if post.group %}

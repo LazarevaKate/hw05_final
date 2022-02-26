@@ -17,6 +17,7 @@ User = get_user_model()
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
+
 @override_settings(MEDIA_ROOT=TEMP_MEDIA_ROOT)
 class PostsPagesTests(TestCase):
     @classmethod
@@ -26,6 +27,7 @@ class PostsPagesTests(TestCase):
         cls.user = User.objects.create_user(username='comment_author')
         cls.follower = User.objects.create_user(username='follower_1')
         cls.not_follower = User.objects.create_user(username='not_follower')
+
         small_gif = (
             b'\x47\x49\x46\x38\x39\x61\x01\x00'
             b'\x01\x00\x00\x00\x00\x21\xf9\x04'
@@ -58,6 +60,11 @@ class PostsPagesTests(TestCase):
             user=cls.user,
             author=cls.post_author,
         )
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
     def setUp(self):
         cache.clear()
@@ -173,11 +180,6 @@ class PostsPagesTests(TestCase):
             reverse('posts:group_posts', kwargs={'slug': self.group.slug}))
         self.assertEqual(len(response.context['page_obj']), 1)
 
-    @classmethod
-    def tearDownClass(cls):
-        super().tearDownClass()
-        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
-
     def test_post_with_image_on_page(self):
         paths = [
             reverse('posts:index'),
@@ -269,10 +271,9 @@ class PostsPagesTests(TestCase):
         self.assertTrue(Follow.objects.filter(
             user=self.user,
             author=self.post_author).exists())
-        self.authorized_client.get(
+        self.authorized_user.get(
             reverse('posts:profile_unfollow',
                     kwargs={'username': self.post_author.username}))
-        Follow.objects.filter(user=self.user, author=self.post_author).delete()
         self.assertFalse(Follow.objects.filter(
             user=self.user,
             author=self.post_author))
