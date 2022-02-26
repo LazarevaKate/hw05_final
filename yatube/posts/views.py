@@ -42,11 +42,8 @@ def profile(request, username):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     post_count = author.posts.count()
-    following = False
-    if request.user.is_authenticated:
-        following = Follow.objects.filter(
-            user=request.user,
-            author=author).exists()
+    following = (request.user.is_authenticated and
+                 author.following.filter(user=request.user).exists())
     context = {
         'author': author,
         'page_obj': page_obj,
@@ -97,7 +94,8 @@ def post_edit(request, post_id):
         return redirect('posts:post_detail', post_id)
     form = PostForm(request.POST or None,
                     files=request.FILES or None,
-                    instance=posts)
+                    instance=posts
+                    )
     context = {
         'form': form,
         'posts': posts,

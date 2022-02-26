@@ -65,29 +65,26 @@ class Post(models.Model):
         verbose_name_plural = 'Посты'
 
 
-class Contact(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    subject = models.CharField(max_length=100)
-    body = models.TextField()
-    is_answered = models.BooleanField(default=False)
-
-
 class Comment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name='comments'
+        related_name='comments',
+        help_text='Оставьте свой комментарий'
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='comments'
     )
-    text = models.TextField()
+    text = models.TextField(
+        verbose_name='Текст комментария',
+        help_text='Напиши комментарий'
+    )
     created = models.DateTimeField(
         verbose_name='Дата публикации комментария',
-        auto_now_add=True)
+        auto_now_add=True
+    )
 
 
 class Follow(models.Model):
@@ -101,3 +98,8 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following'
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'], name='user_author')
+        ]

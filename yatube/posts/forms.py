@@ -34,9 +34,3 @@ class CommentForm(forms.ModelForm):
         help_texts = {
             'text': _('Текст нового комментария'),
         }
-
-    def clean_text(self):
-        data = self.cleaned_data['text']
-        if data == '':
-            raise forms.ValidationError
-        return data
