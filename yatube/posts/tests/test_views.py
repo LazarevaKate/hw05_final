@@ -275,7 +275,7 @@ class PostsPagesTests(TestCase):
                     kwargs={'username': self.post_author.username}))
         self.assertFalse(Follow.objects.filter(
             user=self.user,
-            author=self.post_author))
+            author=self.post_author).exists())
 
 
 class PaginatorViewsTest(TestCase):
