@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block content %}
+  <h1>{{ group }}</h1>
+    <p>
+      {{ group.description }}
+    </p>
+  {% for post in page_obj %}
+    {% include 'includes/post_card.html' %}
+    {% if not forloop.last %}<hr>{% endif %}
+  {% endfor %}
+{% endblock %}

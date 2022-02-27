@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+<h1>Привет, я автор</h1>
+<p>
+  Привет я автор! Тут можно посмотреть, что еще я умею:
+    <a href="http://github.com/LazarevaKate/">cтраница автора на GitHub</a>
+</p>
+<p>
+  Не знаю кому там котики помогают, но моя кошка решила просто не мешать:
+</p>
+  <img src="{% static 'img/cat.jpg' %}" align=”middle” width="500" height="600">
+{% endblock %}

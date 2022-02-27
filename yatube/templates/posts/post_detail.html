@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Пост: {{ posts.text }} {% endblock %}
+{% load user_filters %}
+{% block content %}
+{% load thumbnail %}
+  <div class="row">
+    <aside class="col-12 col-md-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Дата публикации: {{ posts.pub_date|date:"d E Y" }}
+        </li>
+            {% if posts.group %}
+          <li class="list-group-item">
+            Группа: {{ posts.group }}
+            <a href="{{ posts.group.get_absolute_url }}">все записи группы</a>
+          </li>
+          {% endif %}
+          <li class="list-group-item">
+            Автор: {{ posts.author.get_full_name }}
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Всего постов автора:  <span >{{ post_count }}</span>
+          </li>
+          <li class="list-group-item">
+            <a href="{% url 'posts:profile' posts.author %}">все посты пользователя</a>
+          </li>
+        </ul>
+    </aside>
+    <article class="col-12 col-md-9">
+      {% thumbnail posts.image "760x339" crop="center" upscale=True as im %}
+        <img class="card-img my-2" src="{{ im.url }}">
+      {% endthumbnail %}
+      <p>
+        {{ posts.text }}
+      </p>
+        {% if posts.author == request.user %}
+          <a class="btn btn-primary" href="{% url 'posts:post_edit' post_id=posts.id %}">редактировать запись</a>
+        {% endif %}
+      {% include 'includes/add_comment.html' %}
+    </article>
+  </div>
+{% endblock %}
