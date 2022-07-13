@@ -1,3 +1,19 @@
-# hw05_final
+#  HW05_Final
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+Финальная версия проекта Yatube. Сделаны подписки, комментарии, возможность публиковать и удалять посты и комментарии. 
+
+Проект написан на Python 3.7 и Django 2.2.19
+
+Чтобы запустить проект: 
+
+- Установите и активируйте виртуальное окружение
+- Установите зависимости из файла requirements.txt
+```
+pip install -r requirements.txt
+``` 
+- Для запуска тестового сервера в папке с файлом manage.py выполните команду:
+```
+python3 manage.py runserver
+``` 
+
+Автор Лазарева Екатерина
